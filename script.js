@@ -11,7 +11,7 @@ const fetchData = async (url) => {
   }
 };
 
-const getContinents = async () => {
+const getCountriesData = async () => {
   for (let i = 0; i < continents.length; i++) {
     const continentName = continents[i];
     const currentRegion = await fetchData(
@@ -19,32 +19,21 @@ const getContinents = async () => {
     );
     Object.assign(worldObj, { [continentName]: {} })
     for (let j = 0; j < currentRegion.length; j++) {
-      let capital = currentRegion[j].capital && currentRegion[j].capital[0]
-      console.log(capital);
       Object.assign(worldObj[continentName], {
         [currentRegion[j].name.common]: {
           population: currentRegion[j].population,
           area: currentRegion[j].area,
           capital: currentRegion[j].capital && currentRegion[j].capital[0],
           borders: currentRegion[j].borders && currentRegion[j].borders
-          // population: currentRegion[j].population
-          // population: currentRegion[j].population
         }
       })
-      console.log(currentRegion[j]);
-
-
-      // Object.assign(worldObj, {
-      //   [continentName]: {
-      //     [currentRegion[j].name.common]: { population: currentRegion[j].population, }
-
-      //   },
-      // });
+      // console.log(currentRegion[j]); // This logs the entire country info
     }
-    // Object.assign(worldObj, {[continentName]:currentRegion} ) // all countries all data
-    // Object.assign(worldObj, {[continentName]:currentRegion} )
-    // console.log(worldObj)
   }
   console.log(worldObj);
+  //logging only keys for country arr -->> buttons
+  // for (const name in worldObj.Africa) {
+  //   console.log(name);
+  // }
 };
-getContinents();
+getCountriesData();
