@@ -20,7 +20,7 @@ const fetchCitiesData = async (country) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        "limit": 10,
+        "limit": 20,
         "order": "dsc",
         "orderBy": "populationCounts",
         "country": `${country}`
@@ -36,37 +36,39 @@ const fetchCitiesData = async (country) => {
   console.log(data);
 };
 // Build World object
-const getCountriesData = async () => {
+const getWorldData = async () => {
   for (let i = 0; i < continents.length; i++) {
     const continentName = continents[i];
     let continenetArrTmp = [];
     const currentRegion = await fetchData(
       `https://restcountries.com/v3.1/region/${continents[i]}`
     );
-    worldObj[continentName] = {};
-    countryListObj[continentName] = {};
+    worldObj[continentName] = [];
     // console.log(currentRegion);
     for (let j = 0; j < currentRegion.length; j++) {
-      worldObj[continentName][currentRegion[j].name.common] = {
+      countryObj = {}
+      worldObj[continentName].push({
+        name: currentRegion[j].name.common,
         population: currentRegion[j].population,
         area: currentRegion[j].area,
         capital: currentRegion[j].capital && currentRegion[j].capital[0],
-        borders: currentRegion[j].borders && currentRegion[j].borders,
-      };
-      continenetArrTmp.push(currentRegion[j].name.common); // This logs the entire country info
-    }
-    // objArr
-    countryListObj[continentName] = continenetArrTmp;
+        borders: currentRegion[j].borders,
+        bordersCount: currentRegion[j].borders !== undefined ? currentRegion[j].borders.length : 0,
+        flag: currentRegion[j].flags.png
+      })
+    };
+    worldObj[continentName].sort((a, b) => {
+      return b.population - a.population
+    })
   }
-  console.log("worldObj", worldObj);
-  console.log("countryListObj", countryListObj);
+  // console.log("worldObj inside getWorldData", worldObj);
 };
-getCountriesData();
+getWorldData();
 // ---== RETURN  ARR OF OBJECTS CONTAINING TOP 10 CITIES OF SELECTED COUNTRY ==---
-const getCountryCitiesData = async (cty = "france") => {
-  await getCountriesData();
+const getCountryCitiesData = async (cty = "GerMAny") => {
+  await getWorldData();
   // console.log("countryListObj", countryListObj);
-  // console.log("worldObj", worldObj);
+  console.log("worldObj inside getCountryCitiesData", worldObj);
   let country = `${cty}`;
   let citiesArr = [];
   const cities = await fetchCitiesData(country);
@@ -75,7 +77,7 @@ const getCountryCitiesData = async (cty = "france") => {
     let cityObj = {}
     cityObj.city = cities.data[i].city;
     cityObj.country = cities.data[i].country;
-    cityObj.population =  Math.round(cities.data[i].populationCounts[0].value);
+    cityObj.population = Math.round(cities.data[i].populationCounts[0].value);
     // console.log(cities.data[i]);
     citiesArr.push(cityObj)
   }
@@ -83,14 +85,3 @@ const getCountryCitiesData = async (cty = "france") => {
   return citiesArr;
 }
 getCountryCitiesData()
-
-
-
-
-// for (i in worldObj) {
-//   // console.log(worldObj[i])
-  
-//   for (j in worldObj[i]) {
-//       console.log(worldObj[i][j])
-//   }
-// }
