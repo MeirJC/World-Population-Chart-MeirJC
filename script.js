@@ -1,5 +1,7 @@
 const continents = ["Africa", "Americas", "Asia", "Europe", "Oceania"];
 const worldObj = {};
+const countryListObj = {};
+const continenetArr = [];
 // fetch data
 const fetchData = async (url) => {
   try {
@@ -14,26 +16,26 @@ const fetchData = async (url) => {
 const getCountriesData = async () => {
   for (let i = 0; i < continents.length; i++) {
     const continentName = continents[i];
+    let continenetArrTmp = [];
     const currentRegion = await fetchData(
       `https://restcountries.com/v3.1/region/${continents[i]}`
     );
-    Object.assign(worldObj, { [continentName]: {} })
+    Object.assign(worldObj, { [continentName]: {} });
+    Object.assign(countryListObj, { [continentName]: {} });
     for (let j = 0; j < currentRegion.length; j++) {
       Object.assign(worldObj[continentName], {
         [currentRegion[j].name.common]: {
           population: currentRegion[j].population,
           area: currentRegion[j].area,
           capital: currentRegion[j].capital && currentRegion[j].capital[0],
-          borders: currentRegion[j].borders && currentRegion[j].borders
-        }
-      })
-      // console.log(currentRegion[j]); // This logs the entire country info
+          borders: currentRegion[j].borders && currentRegion[j].borders,
+        },
+      });
+      continenetArrTmp.push(currentRegion[j].name.common); // This logs the entire country info
     }
+    Object.assign(countryListObj, { [continentName]: continenetArrTmp });
   }
-  console.log(worldObj);
-  //logging only keys for country arr -->> buttons
-  // for (const name in worldObj.Africa) {
-  //   console.log(name);
-  // }
+  console.log("worldObj", worldObj);
+  console.log("countryListObj", countryListObj);
 };
 getCountriesData();
