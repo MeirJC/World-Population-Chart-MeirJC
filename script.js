@@ -1,6 +1,7 @@
+
+// JS Variables
 const continents = ["Africa", "Americas", "Asia", "Europe", "Oceania"];
 const worldObj = {};
-const countryListObj = {};
 // Fetch data
 const fetchData = async (url) => {
   try {
@@ -57,19 +58,18 @@ const getWorldData = async () => {
         flag: currentRegion[j].flags.png
       })
     };
-    worldObj[continentName].sort((a, b) => {
-      return b.population - a.population
-    })
+    // worldObj[continentName].sort((a, b) => {
+    //   return b.population - a.population
+    // })
   }
   // console.log("worldObj inside getWorldData", worldObj);
 };
 getWorldData();
 // ---== RETURN  ARR OF OBJECTS CONTAINING TOP 10 CITIES OF SELECTED COUNTRY ==---
-const getCountryCitiesData = async (cty = "GerMAny") => {
+const getCountryCitiesData = async (cntry = "GerMAny") => {
   await getWorldData();
-  // console.log("countryListObj", countryListObj);
   console.log("worldObj inside getCountryCitiesData", worldObj);
-  let country = `${cty}`;
+  let country = `${cntry}`;
   let citiesArr = [];
   const cities = await fetchCitiesData(country);
   // console.log("cities.data", cities.data);
@@ -85,3 +85,112 @@ const getCountryCitiesData = async (cty = "GerMAny") => {
   return citiesArr;
 }
 getCountryCitiesData()
+// ----------========== DRAW PAGE ==========----------
+// ===================================================
+// HTML elements
+const nav = document.querySelector("#nav-btn");
+const countryBtn = document.querySelector("#btn-container");
+// -----===== create continents buttons =====-----
+const drawContinentsBtn = () => {
+  const ul = document.createElement("ul")
+  ul.classList.add("countryBtnContainer")
+  for (let i = 0; i < continents.length; i++) {
+    const li = document.createElement("li")
+    li.textContent = (`${continents[i]}`)
+    li.id = `btn${continents[i]}`
+    li.classList.add("btn")
+    li.classList.add("continent-btn")
+    ul.appendChild(li)
+  }
+  ul.classList.add("continentBtnContainer")
+  nav.appendChild(ul);
+}
+drawContinentsBtn();
+// -----===== Create Continents table =====-----
+nav.addEventListener("click", (e) => {
+  if (e.target.tagName === "LI") {
+    myChart.data.labels = worldObj[e.target.textContent].map((e) => {
+      return e.name
+    })
+    myChart.data.datasets[0].data = worldObj[e.target.textContent].map((e) => {
+      return e.population
+    })
+    myChart.update()
+  }
+  drawContriesBtn(e.target.textContent);
+})
+// -----===== create country buttons =====-----
+const drawContriesBtn = (continent) => {
+  countryBtn.innerHTML = ""
+  const countriesBtnList = worldObj[continent]
+  console.log("countriesBtnList", countriesBtnList);
+  const ul = document.createElement("ul")
+  for (let i = 0; i < countriesBtnList.length; i++) {
+    console.log(countriesBtnList[i]);
+    const li = document.createElement("li");
+    li.textContent = (`${countriesBtnList[i].name}`);
+    const flagImg = document.createElement("img");
+    flagImg.src = `${countriesBtnList[i].flag}`
+    flagImg.style.width = "1.5rem"
+    flagImg.style.height = "1rem"
+    li.appendChild(flagImg)
+    li.classList.add("country-btn")
+    li.id = `btn${countriesBtnList[i].name}`
+    li.classList.add("btn")
+    ul.appendChild(li)
+  }
+  ul.classList.add("countryBtnContainer")
+  countryBtn.appendChild(ul);
+}
+// -----===== create Top Country cities Table =====-----
+countryBtn.addEventListener("click", async (e) => {
+  if (e.target.tagName === "LI") {
+    const citiesList = await getCountryCitiesData(e.target.textContent)
+    myChart.data.labels = citiesList.map((e) => {
+      return e.city
+    })
+    myChart.data.datasets[0].data = citiesList.map((e) => {
+      return e.population
+    })
+    myChart.update()
+  }
+})
+
+// -----===== DRAW CHART =====-----
+const ctx = document.getElementById('myChart').getContext('2d');
+Chart.defaults.font.size = 15;
+Chart.defaults.font.weight = 600;
+const myChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: [],
+    datasets: [{
+      label: 'Population Count',
+      data: [],
+      backgroundColor: [
+        'rgba(1, 79, 132, 0.75)',
+        'rgba(1, 73, 124, 0.75)',
+        'rgba(1, 58, 99, 0.75)',
+        'rgba(1, 73, 124, 0.75)',
+        'rgba(1, 79, 132, 0.75)'
+      ],
+      borderColor: [
+        'rgba(1, 79, 132, 0.75)',
+        'rgba(1, 73, 124, 0.75)',
+        'rgba(1, 58, 99, 0.75)',
+        'rgba(1, 73, 124, 0.75)',
+        'rgba(1, 79, 132, 0.75)'
+      ],
+      borderWidth: 1
+    },
+    ]
+  },
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+
+  }
+});
