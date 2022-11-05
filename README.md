@@ -6,9 +6,9 @@ This project featurs a World Population interactive table table orginizer.
 
 ---
 
-<!-- <p align="center">
-  <img src="https://github.com/MeirJC/Capsules---MeirJC/blob/main/Images/Capsules.png" width="400" title="Opening Screen" alt="Page Layot">
-</p> -->
+<p align="center">
+  <img src="https://github.com/MeirJC/World-Population-Chart-MeirJC/blob/main/images/Screenshot.png" width="400" title="Opening Screen" alt="Page Layot">
+</p>
 
 ---
 
