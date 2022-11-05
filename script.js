@@ -58,9 +58,9 @@ const getWorldData = async () => {
         flag: currentRegion[j].flags.png
       })
     };
-    // worldObj[continentName].sort((a, b) => {
-    //   return b.population - a.population
-    // })
+    worldObj[continentName].sort((a, b) => {
+      return b.population - a.population
+    })
   }
   // console.log("worldObj inside getWorldData", worldObj);
 };
@@ -68,7 +68,7 @@ getWorldData();
 // ---== RETURN  ARR OF OBJECTS CONTAINING TOP 10 CITIES OF SELECTED COUNTRY ==---
 const getCountryCitiesData = async (cntry = "GerMAny") => {
   await getWorldData();
-  console.log("worldObj inside getCountryCitiesData", worldObj);
+  // console.log("worldObj inside getCountryCitiesData", worldObj);
   let country = `${cntry}`;
   let citiesArr = [];
   const cities = await fetchCitiesData(country);
@@ -81,7 +81,7 @@ const getCountryCitiesData = async (cntry = "GerMAny") => {
     // console.log(cities.data[i]);
     citiesArr.push(cityObj)
   }
-  console.log("citiesArr", citiesArr);
+  // console.log("citiesArr", citiesArr);
   return citiesArr;
 }
 getCountryCitiesData()
@@ -123,10 +123,10 @@ nav.addEventListener("click", (e) => {
 const drawContriesBtn = (continent) => {
   countryBtn.innerHTML = ""
   const countriesBtnList = worldObj[continent]
-  console.log("countriesBtnList", countriesBtnList);
+  // console.log("countriesBtnList", countriesBtnList);
   const ul = document.createElement("ul")
   for (let i = 0; i < countriesBtnList.length; i++) {
-    console.log(countriesBtnList[i]);
+    // console.log(countriesBtnList[i]);
     const li = document.createElement("li");
     li.textContent = (`${countriesBtnList[i].name}`);
     const flagImg = document.createElement("img");
@@ -155,10 +155,9 @@ countryBtn.addEventListener("click", async (e) => {
     myChart.update()
   }
 })
-
 // -----===== DRAW CHART =====-----
 const ctx = document.getElementById('myChart').getContext('2d');
-Chart.defaults.font.size = 15;
+Chart.defaults.font.size = 14;
 Chart.defaults.font.weight = 600;
 const myChart = new Chart(ctx, {
   type: 'bar',
