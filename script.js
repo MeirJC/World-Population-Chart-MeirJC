@@ -21,7 +21,7 @@ const fetchCitiesData = async (country) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        "limit": 20,
+        "limit": 15,
         "order": "dsc",
         "orderBy": "populationCounts",
         "country": `${country}`
