@@ -21,6 +21,8 @@ The API used for this project are:
 [restcountries API](https://restcountries.com/).
 [countriesnow API](https://countriesnow.space/).
 
+and using the [Chart.js library](https://www.chartjs.org/).
+
 ---
 
 Project is live [here](https://world-population-project-meirjc.netlify.app/).
